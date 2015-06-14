@@ -15,29 +15,34 @@ namespace Dobee\Logger;
 
 use Monolog\Handler\StreamHandler;
 
+/**
+ * Class Logger
+ *
+ * @package Dobee\Logger
+ */
 class Logger
 {
-    private $config;
+    /**
+     * @var array
+     */
+    private $config = [
+        'save.name' => 'logger',
+        'save.path' => '',
+    ];
 
-    private $log;
-
-    public function __construct(array $config)
+    /**
+     * @param array $config
+     * @param int   $level
+     * @return \Monolog\Logger
+     */
+    public function createLogger(array $config = [], $level = \Monolog\Logger::INFO)
     {
-        $this->config = $config;
+        $config = array_merge($this->config, $config);
 
-        $this->log = new \Monolog\Logger(isset($config['name']) ? $config['name'] : 'log.log');
+        $logger = new \Monolog\Logger($config['save.name'] . '.log');
 
-        if (isset($config['path'])) {
-            if (!is_dir($config['path'])) {
-                mkdir($config['path'], 0755, true);
-            }
-        }
+        $logger->pushHandler(new StreamHandler($config['save.path'] . DIRECTORY_SEPARATOR . $config['save.name'], $level));
 
-        $this->log->pushHandler(new StreamHandler($config['path'] . DIRECTORY_SEPARATOR . $config['name'], \Monolog\Logger::INFO));
-    }
-
-    public function save($content)
-    {
-        $this->log->addInfo($content);
+        return $logger;
     }
 }
