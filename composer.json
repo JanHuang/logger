@@ -1,9 +1,9 @@
 {
-    "name": "dobee/logger",
+    "name": "fastd/logger",
     "description": "logger component",
     "license": "MIT",
     "type": "library",
-    "keywords": ["Logger", "dobee"],
+    "keywords": ["Logger", "FastD"],
     "authors": [
         {
             "name": "janhuang",
@@ -17,7 +17,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Dobee\\": "src/Dobee"
+            "FastD\\": "src/FastD"
         }
     }
 }

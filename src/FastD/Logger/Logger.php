@@ -11,14 +11,14 @@
  * Gmail: bboyjanhuang@gmail.com
  */
 
-namespace Dobee\Logger;
+namespace FastD\Logger;
 
 use Monolog\Handler\StreamHandler;
 
 /**
  * Class Logger
  *
- * @package Dobee\Logger
+ * @package FastD\Logger
  */
 class Logger
 {
