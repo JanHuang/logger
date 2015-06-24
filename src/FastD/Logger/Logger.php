@@ -33,6 +33,10 @@ class Logger
      */
     public function __construct($log, $level = \Monolog\Logger::INFO)
     {
+        if (!is_dir(dirname($log))) {
+            mkdir(dirname($log), 0755, true);
+        }
+
         $this->monolog = new \Monolog\Logger(pathinfo($log, PATHINFO_FILENAME));
 
         $this->monolog->pushHandler(new StreamHandler($log, $level));
