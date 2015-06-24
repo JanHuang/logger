@@ -23,26 +23,58 @@ use Monolog\Handler\StreamHandler;
 class Logger
 {
     /**
-     * @var array
+     * @var \Monolog\Logger
      */
-    private $config = [
-        'save.name' => 'logger',
-        'save.path' => '',
-    ];
+    private $monolog;
 
     /**
-     * @param array $config
-     * @param int   $level
-     * @return \Monolog\Logger
+     * @param     $log
+     * @param int $level
      */
-    public function createLogger(array $config = [], $level = \Monolog\Logger::INFO)
+    public function __construct($log, $level = \Monolog\Logger::INFO)
     {
-        $config = array_merge($this->config, $config);
+        $this->monolog = new \Monolog\Logger(pathinfo($log, PATHINFO_FILENAME));
 
-        $logger = new \Monolog\Logger($config['save.name'] . '.log');
+        $this->monolog->pushHandler(new StreamHandler($log, $level));
+    }
 
-        $logger->pushHandler(new StreamHandler($config['save.path'] . DIRECTORY_SEPARATOR . $config['save.name'], $level));
+    /**
+     * @param string $log
+     * @param int   $level
+     * @return static
+     */
+    public static function createLogger($log, $level = \Monolog\Logger::INFO)
+    {
+        return new static($log, $level);
+    }
 
-        return $logger;
+    /**
+     * @param       $message
+     * @param array $context
+     * @return bool
+     */
+    public function info($message, array $context = [])
+    {
+        return $this->monolog->addInfo($message, $context);
+    }
+
+    /**
+     * @param       $message
+     * @param array $context
+     * @return bool
+     */
+    public function error($message, array $context = [])
+    {
+        return $this->monolog->addError($message, $context);
+    }
+
+    /**
+     * @param       $message
+     * @param array $context
+     * @return bool
+     */
+    public function notice($message, array $context = array())
+    {
+        return $this->monolog->addNotice($message, $context);
     }
 }
