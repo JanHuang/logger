@@ -23,62 +23,20 @@ use Monolog\Handler\StreamHandler;
 class Logger
 {
     /**
-     * @var \Monolog\Logger
+     * @param string $log
+     * @param int   $level
+     * @return \Monolog\Logger
      */
-    private $monolog;
-
-    /**
-     * @param     $log
-     * @param int $level
-     */
-    public function __construct($log, $level = \Monolog\Logger::INFO)
+    public function createLogger($log, $level = \Monolog\Logger::INFO)
     {
         if (!is_dir(dirname($log))) {
             mkdir(dirname($log), 0755, true);
         }
 
-        $this->monolog = new \Monolog\Logger(pathinfo($log, PATHINFO_FILENAME));
+        $logger = new \Monolog\Logger(pathinfo($log, PATHINFO_FILENAME));
 
-        $this->monolog->pushHandler(new StreamHandler($log, $level));
-    }
+        $logger->pushHandler(new StreamHandler($log, $level));
 
-    /**
-     * @param string $log
-     * @param int   $level
-     * @return static
-     */
-    public static function createLogger($log, $level = \Monolog\Logger::INFO)
-    {
-        return new static($log, $level);
-    }
-
-    /**
-     * @param       $message
-     * @param array $context
-     * @return bool
-     */
-    public function info($message, array $context = [])
-    {
-        return $this->monolog->addInfo($message, $context);
-    }
-
-    /**
-     * @param       $message
-     * @param array $context
-     * @return bool
-     */
-    public function error($message, array $context = [])
-    {
-        return $this->monolog->addError($message, $context);
-    }
-
-    /**
-     * @param       $message
-     * @param array $context
-     * @return bool
-     */
-    public function notice($message, array $context = array())
-    {
-        return $this->monolog->addNotice($message, $context);
+        return $logger;
     }
 }

@@ -22,8 +22,10 @@ class LoggerWriteTest extends \PHPUnit_Framework_TestCase
 {
     public function testWrite()
     {
-        $logger = Logger::createLogger(__DIR__ . '/test1.log');
+        $logger = new Logger();
 
-//        $this->assertTrue($logger->info('demo', ['_GET' => ['name' => 'janhuang'], '_POST' => ['age' => 1]]));
+        $logger = $logger->createLogger(__DIR__ . '/test1.log');
+
+        $this->assertTrue($logger->addInfo('demo', ['_GET' => ['name' => 'janhuang'], '_POST' => ['age' => 1]]));
     }
 }
